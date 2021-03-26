@@ -9,7 +9,8 @@ jobs:
       fail-fast: false
       matrix:
         go:
-          - "tip"
+          - 1.16.x
+          - tip
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
