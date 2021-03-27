@@ -10,7 +10,7 @@ import (
 
 type validator struct{}
 
-func (v *validator) Validate(puzzle ast.Puzzle) error {
+func (v *validator) Validate(_ ast.PuzzleSet) error {
 	return nil
 }
 

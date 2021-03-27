@@ -3,6 +3,7 @@ package ast
 
 import (
 	"fmt"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/alexeyco/hanjie/errors"
@@ -27,8 +28,8 @@ type Puzzle struct {
 
 // Author of puzzle.
 type Author struct {
-	Name string `yaml:"name,omitempty"`
-	ID   string `yaml:"id,omitempty"`
+	Name string `yaml:"name"`
+	ID   string `yaml:"id"`
 }
 
 // Colors used in puzzle.
@@ -46,14 +47,18 @@ func (c Char) MarshalText() ([]byte, error) {
 func (c *Char) UnmarshalText(b []byte) error {
 	cnt := utf8.RuneCount(b)
 	if cnt == 0 {
-		return fmt.Errorf(`%w empty string: should be a single char`, errors.ErrUnmarshal)
+		return fmt.Errorf(`%w empty string: should be a single char`, errors.ErrSyntax)
 	}
 
 	if cnt > 1 {
-		return fmt.Errorf(`%w "%s": should be a single char`, errors.ErrUnmarshal, string(b))
+		return fmt.Errorf(`%w "%s": should be a single char`, errors.ErrSyntax, string(b))
 	}
 
 	r, _ := utf8.DecodeRune(b)
+	if unicode.IsSymbol(r) {
+		return fmt.Errorf(`%w "%s": should be a symbolic character`, errors.ErrSyntax, string(b))
+	}
+
 	*c = Char(r)
 
 	return nil
@@ -73,7 +78,7 @@ func (c Color) MarshalText() ([]byte, error) {
 func (c *Color) UnmarshalText(b []byte) (err error) {
 	s := string(b)
 	if s[0] != '#' {
-		return errors.ErrUnmarshal
+		return fmt.Errorf(`%w: color hex "%s" should start with "#"`, errors.ErrSyntax, s)
 	}
 
 	hexToByte := func(b byte) byte {
@@ -86,7 +91,7 @@ func (c *Color) UnmarshalText(b []byte) (err error) {
 			return b - 'A' + 10
 		}
 
-		err = errors.ErrUnmarshal
+		err = fmt.Errorf(`%w: wrong color hex "%s"`, errors.ErrSyntax, s)
 
 		return 0
 	}
@@ -101,7 +106,7 @@ func (c *Color) UnmarshalText(b []byte) (err error) {
 		c.G = hexToByte(s[2]) * 17
 		c.B = hexToByte(s[3]) * 17
 	default:
-		err = errors.ErrUnmarshal
+		err = fmt.Errorf(`%w: incorrect color hex length "%s"`, errors.ErrSyntax, s)
 	}
 
 	return
@@ -126,8 +131,8 @@ func (c Color) RGBA() (r, g, b, a uint32) {
 
 // Clue defines a clue used in the puzzle.
 type Clue struct {
-	Columns []Line `yaml:"columns"`
-	Rows    []Line `yaml:"rows"`
+	Columns [][]Line `yaml:"columns"`
+	Rows    [][]Line `yaml:"rows"`
 }
 
 // Line of the clue.

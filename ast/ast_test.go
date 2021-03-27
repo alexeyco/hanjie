@@ -51,8 +51,8 @@ func TestChar_UnmarshalText(t *testing.T) {
 			t.Error(`Error should not be nil`)
 		}
 
-		if !goerrors.Is(err, errors.ErrUnmarshal) {
-			t.Errorf(`Error should be errors.ErrUnmarshal, "%v" given`, err)
+		if !goerrors.Is(err, errors.ErrSyntax) {
+			t.Errorf(`Error should be errors.ErrSyntax, "%v" given`, err)
 		}
 
 		if ch != 0 {
@@ -70,8 +70,8 @@ func TestChar_UnmarshalText(t *testing.T) {
 			t.Error(`Error should not be nil`)
 		}
 
-		if !goerrors.Is(err, errors.ErrUnmarshal) {
-			t.Errorf(`Error should be errors.ErrUnmarshal, "%v" given`, err)
+		if !goerrors.Is(err, errors.ErrSyntax) {
+			t.Errorf(`Error should be errors.ErrSyntax, "%v" given`, err)
 		}
 
 		if ch != 0 {
@@ -164,17 +164,17 @@ func TestColor_UnmarshalText(t *testing.T) {
 		{
 			b:        []byte("#zzz"),
 			expected: &ast.Color{},
-			err:      errors.ErrUnmarshal,
+			err:      errors.ErrSyntax,
 		},
 		{
 			b:        []byte("#z"),
 			expected: &ast.Color{},
-			err:      errors.ErrUnmarshal,
+			err:      errors.ErrSyntax,
 		},
 		{
 			b:        []byte("wrong"),
 			expected: &ast.Color{},
-			err:      errors.ErrUnmarshal,
+			err:      errors.ErrSyntax,
 		},
 	}
 

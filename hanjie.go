@@ -11,7 +11,7 @@ import (
 
 // Validator interface.
 type Validator interface {
-	Validate(ast.Puzzle) error
+	Validate(ast.PuzzleSet) error
 }
 
 // Read set of puzzles from io.Reader.
