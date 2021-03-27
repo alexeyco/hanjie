@@ -1,4 +1,4 @@
-module github.com/alexeyco/pbn
+module github.com/alexeyco/hanjie
 
 go 1.16
 

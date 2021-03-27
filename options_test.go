@@ -1,11 +1,11 @@
-package pbn_test
+package hanjie_test
 
 import (
 	"reflect"
 	"testing"
 
-	"github.com/alexeyco/pbn"
-	"github.com/alexeyco/pbn/ast"
+	"github.com/alexeyco/hanjie"
+	"github.com/alexeyco/hanjie/ast"
 )
 
 type validator struct{}
@@ -18,9 +18,9 @@ func TestWithValidator(t *testing.T) {
 	t.Parallel()
 
 	v := &validator{}
-	o := pbn.Options{}
+	o := hanjie.Options{}
 
-	pbn.WithValidator(v)(&o)
+	hanjie.WithValidator(v)(&o)
 
 	if !reflect.DeepEqual(v, o.Validator) {
 		t.Error(`Should be equal`)
@@ -30,8 +30,8 @@ func TestWithValidator(t *testing.T) {
 func TestSkipValidation(t *testing.T) {
 	t.Parallel()
 
-	o := pbn.Options{}
-	pbn.SkipValidation(&o)
+	o := hanjie.Options{}
+	hanjie.SkipValidation(&o)
 
 	if o.SkipValidation == false {
 		t.Error(`Should be true`)

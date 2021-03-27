@@ -1,12 +1,12 @@
-// Package pbn contains any entities and instruments to read, write and validate puzzles.
-package pbn
+// Package hanjie contains any entities and instruments to read, write and validate puzzles.
+package hanjie
 
 import (
 	"io"
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/alexeyco/pbn/ast"
+	"github.com/alexeyco/hanjie/ast"
 )
 
 // Validator interface.

@@ -1,6 +1,6 @@
-package pbn
+package hanjie
 
-import "github.com/alexeyco/pbn/validator"
+import "github.com/alexeyco/hanjie/validator"
 
 // Options defines puzzle read- and write options.
 type Options struct {

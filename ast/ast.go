@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"unicode/utf8"
 
-	"github.com/alexeyco/pbn/errors"
+	"github.com/alexeyco/hanjie/errors"
 )
 
 // PuzzleSet the root structure of the document. Includes all puzzles.

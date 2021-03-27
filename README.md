@@ -1,4 +1,4 @@
-# pbn
+# hanjie
 
 "Paint-By-Number" is one of many names for a type of graphical logic puzzle originating in Japan. 
 Other common names for these puzzles are Nonograms, Griddlers, Hanjie, and Picross.

@@ -1,7 +1,7 @@
 // Package validator contains default puzzle validator.
 package validator
 
-import "github.com/alexeyco/pbn/ast"
+import "github.com/alexeyco/hanjie/ast"
 
 // Validator of the puzzle.
 type Validator struct{}

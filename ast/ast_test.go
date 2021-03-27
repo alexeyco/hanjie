@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/alexeyco/pbn/ast"
-	"github.com/alexeyco/pbn/errors"
+	"github.com/alexeyco/hanjie/ast"
+	"github.com/alexeyco/hanjie/errors"
 )
 
 func TestChar_MarshalText(t *testing.T) {
@@ -52,7 +52,7 @@ func TestChar_UnmarshalText(t *testing.T) {
 		}
 
 		if !goerrors.Is(err, errors.ErrUnmarshal) {
-			t.Errorf(`Error should be pbn.ErrUnmarshal, "%v" given`, err)
+			t.Errorf(`Error should be errors.ErrUnmarshal, "%v" given`, err)
 		}
 
 		if ch != 0 {
@@ -71,7 +71,7 @@ func TestChar_UnmarshalText(t *testing.T) {
 		}
 
 		if !goerrors.Is(err, errors.ErrUnmarshal) {
-			t.Errorf(`Error should be pbn.ErrUnmarshal, "%v" given`, err)
+			t.Errorf(`Error should be errors.ErrUnmarshal, "%v" given`, err)
 		}
 
 		if ch != 0 {
