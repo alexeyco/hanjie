@@ -11,7 +11,7 @@ var (
 	ErrEmptyAuthorName = errors.New("author name shouldn't be empty")
 	// ErrEmptyTitle validation error, reports that puzzle title shouldn't be empty.
 	ErrEmptyTitle = errors.New("title shouldn't be empty")
-	// ErrEmptyTitle validation error, reports that puzzle title shouldn't be empty.
+	// ErrIncorrectBackground validation error, reports that puzzle title shouldn't be empty.
 	ErrIncorrectBackground = errors.New("incorrect background")
 	// ErrColorHasAlreadyBeenUsed validation error, reports if color has already been used.
 	ErrColorHasAlreadyBeenUsed = errors.New("color has already been used")
