@@ -40,7 +40,7 @@ jobs:
           version: v1.38.0
       - name: Run tests
         working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/hanjie
-        run: go test -race -covermode atomic -coverprofile=coverage.out .
+        run: go test -race -covermode atomic -coverprofile=coverage.out ./...
       - name: Install goveralls
         env:
           GO111MODULE: off
