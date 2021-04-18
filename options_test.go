@@ -1,11 +1,11 @@
 package hanjie_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/alexeyco/hanjie"
 	"github.com/alexeyco/hanjie/ast"
+	"github.com/stretchr/testify/assert"
 )
 
 type validator struct{}
@@ -22,9 +22,7 @@ func TestWithValidator(t *testing.T) {
 
 	hanjie.WithValidator(v)(&o)
 
-	if !reflect.DeepEqual(v, o.Validator) {
-		t.Error(`Should be equal`)
-	}
+	assert.Equal(t, v, o.Validator)
 }
 
 func TestSkipValidation(t *testing.T) {
@@ -33,7 +31,5 @@ func TestSkipValidation(t *testing.T) {
 	o := hanjie.Options{}
 	hanjie.SkipValidation(&o)
 
-	if o.SkipValidation == false {
-		t.Error(`Should be true`)
-	}
+	assert.True(t, o.SkipValidation)
 }

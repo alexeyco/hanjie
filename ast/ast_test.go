@@ -1,13 +1,12 @@
 package ast_test
 
 import (
-	goerrors "errors"
 	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/alexeyco/hanjie/ast"
 	"github.com/alexeyco/hanjie/errors"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestChar_MarshalText(t *testing.T) {
@@ -16,13 +15,8 @@ func TestChar_MarshalText(t *testing.T) {
 	ch := ast.Char('x')
 	actual, err := ch.MarshalText()
 
-	if err != nil {
-		t.Errorf(`Error should be nil, "%v" given`, err)
-	}
-
-	if string(actual) != "x" {
-		t.Errorf(`Should be "x", "%s" given`, string(actual))
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, []byte("x"), actual)
 }
 
 func TestChar_UnmarshalText(t *testing.T) {
@@ -32,13 +26,10 @@ func TestChar_UnmarshalText(t *testing.T) {
 		t.Parallel()
 
 		var ch ast.Char
-		if err := ch.UnmarshalText([]byte("x")); err != nil {
-			t.Errorf(`Error should be nil, "%v" given`, err)
-		}
+		err := ch.UnmarshalText([]byte("x"))
 
-		if rune(ch) != 'x' {
-			t.Errorf(`Char should be 'x', '%s' given`, string(ch))
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, ast.Char('x'), ch)
 	})
 
 	t.Run("ErrorCauseEmpty", func(t *testing.T) {
@@ -47,17 +38,9 @@ func TestChar_UnmarshalText(t *testing.T) {
 		var ch ast.Char
 		err := ch.UnmarshalText([]byte{})
 
-		if err == nil {
-			t.Error(`Error should not be nil`)
-		}
-
-		if !goerrors.Is(err, errors.ErrSyntax) {
-			t.Errorf(`Error should be errors.ErrSyntax, "%v" given`, err)
-		}
-
-		if ch != 0 {
-			t.Errorf(`Char should be blank, '%s' given`, string(ch))
-		}
+		assert.Error(t, err)
+		assert.ErrorIs(t, err, errors.ErrSyntax)
+		assert.Equal(t, int32(0), int32(ch))
 	})
 
 	t.Run("ErrorCauseTooManyCharacters", func(t *testing.T) {
@@ -66,17 +49,9 @@ func TestChar_UnmarshalText(t *testing.T) {
 		var ch ast.Char
 		err := ch.UnmarshalText([]byte("xx"))
 
-		if err == nil {
-			t.Error(`Error should not be nil`)
-		}
-
-		if !goerrors.Is(err, errors.ErrSyntax) {
-			t.Errorf(`Error should be errors.ErrSyntax, "%v" given`, err)
-		}
-
-		if ch != 0 {
-			t.Errorf(`Char should be blank, '%s' given`, string(ch))
-		}
+		assert.Error(t, err)
+		assert.ErrorIs(t, err, errors.ErrSyntax)
+		assert.Equal(t, int32(0), int32(ch))
 	})
 }
 
@@ -117,14 +92,9 @@ func TestColor_MarshalText(t *testing.T) {
 			t.Parallel()
 
 			b, err := testDatum.color.MarshalText()
-			if err != nil {
-				t.Errorf(`Should be nil, "%v" given`, err)
-			}
 
-			actual := string(b)
-			if actual != testDatum.expected {
-				t.Errorf(`Should be "%s", "%s" given`, testDatum.expected, actual)
-			}
+			assert.NoError(t, err)
+			assert.Equal(t, testDatum.expected, string(b))
 		})
 	}
 }
@@ -185,25 +155,13 @@ func TestColor_UnmarshalText(t *testing.T) {
 			t.Parallel()
 
 			actual := &ast.Color{}
-
 			err := actual.UnmarshalText(testDatum.b)
-			switch {
-			case testDatum.err == nil && err != nil:
-				t.Errorf(`Should be nil, "%v" given`, err)
-			case testDatum.err != nil && err == nil:
-				t.Errorf(`Should be "%v", nil given`, testDatum.err)
-			case testDatum.err != nil && err != nil && !goerrors.Is(err, testDatum.err):
-				t.Errorf(`Should be "%v", "%s" given`, testDatum.err, err)
-			}
 
-			if !reflect.DeepEqual(testDatum.expected, actual) {
-				t.Errorf(`Should be {R: %d, G: %d, B: %d}, {R: %d, G: %d, B: %d} given`,
-					testDatum.expected.R,
-					testDatum.expected.G,
-					testDatum.expected.B,
-					actual.R,
-					actual.G,
-					actual.B)
+			assert.Equal(t, testDatum.expected, actual)
+			if testDatum.err == nil {
+				assert.NoError(t, err)
+			} else {
+				assert.ErrorIs(t, err, testDatum.err)
 			}
 		})
 	}
@@ -237,14 +195,11 @@ func TestColor_RGBA(t *testing.T) {
 			t.Parallel()
 
 			r, g, b, a := testDatum.color.RGBA()
-			if r != testDatum.r || g != testDatum.g || b != testDatum.b || a != testDatum.a {
-				t.Errorf(`Should be (%d, %d, %d, %d), (%d, %d, %d, %d) given`,
-					testDatum.r,
-					testDatum.g,
-					testDatum.b,
-					testDatum.a,
-					r, g, b, a)
-			}
+
+			assert.Equal(t, testDatum.r, r)
+			assert.Equal(t, testDatum.g, g)
+			assert.Equal(t, testDatum.b, b)
+			assert.Equal(t, testDatum.a, a)
 		})
 	}
 }

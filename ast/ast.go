@@ -131,12 +131,15 @@ func (c Color) RGBA() (r, g, b, a uint32) {
 
 // Clue defines a clue used in the puzzle.
 type Clue struct {
-	Columns [][]Line `yaml:"columns"`
-	Rows    [][]Line `yaml:"rows"`
+	Columns []Line `yaml:"columns,flow"`
+	Rows    []Line `yaml:"rows,flow"`
 }
 
-// Line of the clue.
-type Line struct {
+// Line of clue items.
+type Line []Item
+
+// Item of the clue.
+type Item struct {
 	Color Char `yaml:"color"`
 	Count int  `yaml:"count"`
 }

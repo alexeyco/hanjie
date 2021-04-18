@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/alexeyco/hanjie/errors"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestValidationError_Error(t *testing.T) {
@@ -12,28 +13,22 @@ func TestValidationError_Error(t *testing.T) {
 
 	err := errors.ValidationError{}
 
-	if err.Error() != "validation error" {
-		t.Errorf(`Should be "validation error", "%s" given`, err.Error())
-	}
+	assert.Equal(t, err.Error(), "validation error")
 }
 
 func TestValidationError_Append(t *testing.T) {
 	t.Parallel()
 
-	err := errors.ValidationError{}
-
-	err.Append(goerrors.New("foo"))
-	err.Append(goerrors.New("bar"))
-
-	if len(err) != 2 {
-		t.Fatalf(`Should be 2, %d given`, len(err))
+	expected := errors.ValidationError{
+		goerrors.New("foo"),
+		goerrors.New("bar"),
 	}
 
-	if err[0].Error() != "foo" {
-		t.Errorf(`Should be "foo", "%v" given`, err[0])
-	}
+	actual := errors.ValidationError{}
 
-	if err[1].Error() != "bar" {
-		t.Errorf(`Should be "bar", "%v" given`, err[1])
-	}
+	actual.Append(goerrors.New("foo"))
+	actual.Append(goerrors.New("bar"))
+
+	assert.Len(t, actual, 2)
+	assert.Equal(t, expected, actual)
 }

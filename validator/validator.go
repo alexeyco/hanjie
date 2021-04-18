@@ -2,8 +2,6 @@
 package validator
 
 import (
-	"fmt"
-
 	"github.com/alexeyco/hanjie/ast"
 	"github.com/alexeyco/hanjie/errors"
 )
@@ -16,10 +14,15 @@ type Validator struct {
 // Validate the puzzle.
 func (v *Validator) Validate(puzzleSet ast.PuzzleSet) error {
 	var validationError errors.ValidationError
-	for n, puzzle := range puzzleSet {
+	for _, puzzle := range puzzleSet {
 		for _, r := range v.rules {
-			if err := r(puzzle); err != nil {
-				validationError.Append(fmt.Errorf(`#%d: %w`, n, err))
+			err, stop := r(puzzle)
+			if err != nil {
+				validationError.Append(err)
+			}
+
+			if stop {
+				break
 			}
 		}
 	}
@@ -35,13 +38,13 @@ func (v *Validator) Validate(puzzleSet ast.PuzzleSet) error {
 func New() *Validator {
 	return &Validator{
 		rules: []rule{
-			authorNameShouldNotBeEmpty,
-			titleShouldNotBeEmpty,
-			backgroundShouldBeCorrect,
-			colorsShouldBeUnique,
-			goalShouldHaveRows,
-			goalLinesShouldHaveTheSameLength,
-			//goalShouldBeCorrect,
+			authorNameRule,
+			titleRule,
+			backgroundRule,
+			uniqueColorRule,
+			goalRowsRule,
+			goalLinesRule,
+			goalClueMatchRule,
 		},
 	}
 }
