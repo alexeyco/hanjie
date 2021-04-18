@@ -1,0 +1,52 @@
+---
+name: Test
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+  pull_request:
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go:
+          - 1.14
+          - 1.15
+          - 1.x # Latest version
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/go/src/github.com/alexeyco/hanjie
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Show Go version
+        run: go version
+      - name: Install dependencies
+        working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/hanjie
+        run: go mod vendor
+      - name: Lint source code
+        uses: golangci/golangci-lint-action@v2
+        with:
+          working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/hanjie
+          version: v1.38.0
+      - name: Run tests
+        working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/hanjie
+        run: go test -race -covermode atomic -coverprofile=coverage.out .
+      - name: Install goveralls
+        env:
+          GO111MODULE: off
+        run: go get github.com/mattn/goveralls
+      - name: Upload coverage
+        env:
+          COVERALLS_TOKEN: ${{ github.token }}
+          GIT_BRANCH: ${{ github.head_ref }}
+        working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/hanjie
+        run: goveralls -coverprofile=coverage.out -service=github

@@ -1,5 +1,10 @@
 # hanjie
 
+[![Test](https://github.com/alexeyco/hanjie/actions/workflows/test.yml/badge.svg)](https://github.com/alexeyco/hanjie/actions/workflows/test.yml)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/alexeyco/hanjie)](https://pkg.go.dev/github.com/alexeyco/hanjie)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alexeyco/hanjie)](https://goreportcard.com/report/github.com/alexeyco/hanjie)
+[![Coverage Status](https://coveralls.io/repos/github/alexeyco/hanjie/badge.svg?branch=main)](https://coveralls.io/github/alexeyco/hanjie?branch=main)
+
 "Paint-By-Number" is one of many names for a type of graphical logic puzzle originating in Japan. 
 Other common names for these puzzles are Nonograms, Griddlers, Hanjie, and Picross.
 
